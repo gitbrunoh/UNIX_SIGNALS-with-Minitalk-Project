@@ -6,7 +6,7 @@
 /*   By: brunhenr <brunhenr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 11:23:15 by brunhenr          #+#    #+#             */
-/*   Updated: 2024/05/21 14:42:27 by brunhenr         ###   ########.fr       */
+/*   Updated: 2024/05/21 16:04:13 by brunhenr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "libft/libft.h"
-#include <sys/types.h> // for pid_t
-#include <errno.h> // for errno
+#include <sys/types.h>
+#include <errno.h>
 
 pid_t	g_server_pid;
 

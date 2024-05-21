@@ -6,7 +6,7 @@
 /*   By: brunhenr <brunhenr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 12:38:00 by brunhenr          #+#    #+#             */
-/*   Updated: 2024/05/21 10:46:46 by brunhenr         ###   ########.fr       */
+/*   Updated: 2024/05/21 16:04:04 by brunhenr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "libft/libft.h"
-#include <sys/types.h> // for pid_t
-#include <unistd.h>
-#include <errno.h> // for errno
+#include <sys/types.h>
+#include <errno.h>
 
 unsigned char	reverse_bits(unsigned char b)
 {
