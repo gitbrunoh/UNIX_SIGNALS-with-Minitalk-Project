@@ -6,19 +6,13 @@ all: libft client server
 
 bonus: libft client_bonus server_bonus
 
-libft:
-	make -C libft
+libft/libft.a:
+	make -C libft all
 
-client.o: client.c
-	$(CC) $(FLAGS) -I./libft -c client.c
-
-server.o: server.c
-	$(CC) $(FLAGS) -I./libft -c server.c
-
-client: client.o libft	
+client: client.o libft/libft.a
 	$(CC) -o client client.o libft/libft.a
 
-server: server.o libft
+server: server.o libft/libft.a
 	$(CC) -o server server.o libft/libft.a
 
 client_bonus.o: client_bonus.c
@@ -27,10 +21,10 @@ client_bonus.o: client_bonus.c
 server_bonus.o: server_bonus.c
 	$(CC) $(FLAGS) -I./libft -c server_bonus.c
 
-client_bonus: client_bonus.o libft	
+client_bonus: client_bonus.o libft/libft.a
 	$(CC) -o client_bonus client_bonus.o libft/libft.a
 
-server_bonus: server_bonus.o libft
+server_bonus: server_bonus.o libft/libft.a
 	$(CC) -o server_bonus server_bonus.o libft/libft.a
 
 clean:
