@@ -9,6 +9,12 @@ bonus: libft client_bonus server_bonus
 libft/libft.a:
 	make -C libft all
 
+client.o: client.c
+	$(CC) $(FLAGS) -I./libft -c client.c
+
+server.o: server.c
+	$(CC) $(FLAGS) -I./libft -c server.c
+
 client: client.o libft/libft.a
 	$(CC) -o client client.o libft/libft.a
 
@@ -16,10 +22,10 @@ server: server.o libft/libft.a
 	$(CC) -o server server.o libft/libft.a
 
 client_bonus.o: client_bonus.c
-	$(CC) $(FLAGS) -I./libft -c client_bonus.c
+	$(CC) $(FLAGS) -g -I./libft -c client_bonus.c
 
 server_bonus.o: server_bonus.c
-	$(CC) $(FLAGS) -I./libft -c server_bonus.c
+	$(CC) $(FLAGS) -g -I./libft -c server_bonus.c
 
 client_bonus: client_bonus.o libft/libft.a
 	$(CC) -o client_bonus client_bonus.o libft/libft.a

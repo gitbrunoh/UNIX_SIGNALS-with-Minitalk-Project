@@ -1,8 +1,25 @@
 # UNIX_SIGNAL-with-Minitalk-Project  
 
-A communication program in the form of a client and a server designed to run on a terminal configured with UTF-8.
+This is a project I did for 42 Lisbon for the Common Core program.
 
-## requirements/specifications
+It is a communication program in the form of a client and a server designed to run on a terminal configured with UTF-8
+
+## Usage:
+run make and/or make bonus_
+```
+../UNIX_SIGNAL-with-Minitalk-Project$ make 
+../UNIX_SIGNAL-with-Minitalk-Project$ make bonus
+```
+first run the server. It will print its PID.
+```
+./server
+```
+Then, using that PID, run the client.
+```
+./client [SERVER PID] "any message"
+```
+
+## Project requirements/specifications:
 The server must be started first. After its launch, it has to print its PID.
 
 The client takes two parameters:  
@@ -18,7 +35,9 @@ The communication between your client and your server has to be done only using 
 
 And you can only use these two signals: SIGUSR1 and SIGUSR2.
 
+There are a limited number of permitted functions.
+
 ## BONUS PART
 
-#### 1. The server acknowledges every message received by sending back a signal to the client.  
-#### 2. Unicode characters support.  
+#### 1. The server acknowledges every message received by sending back a signal to the client.
+#### 2. Unicode characters support 👾
