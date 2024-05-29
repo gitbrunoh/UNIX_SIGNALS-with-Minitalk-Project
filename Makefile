@@ -2,6 +2,8 @@ CC = cc
 
 FLAGS = -Wall -Wextra -Werror
 
+NAME = client
+
 all: libft client server
 
 bonus: libft client_bonus server_bonus
@@ -9,7 +11,7 @@ bonus: libft client_bonus server_bonus
 libft/libft.a:
 	make -C libft all
 
-client: client.o libft/libft.a
+$(NAME): client.o libft/libft.a
 	$(CC) -o client client.o libft/libft.a
 
 server: server.o libft/libft.a

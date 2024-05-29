@@ -74,7 +74,7 @@ void	send_message(int pid, unsigned char *str)
 			if (check_kill == -1)
 				error_handler(pid, check_kill);
 			str[i] = str[i] >> 1;
-			usleep(700);
+			usleep(500);
 			k++;
 		}
 		i++;
