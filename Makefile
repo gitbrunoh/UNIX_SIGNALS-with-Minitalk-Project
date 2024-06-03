@@ -35,9 +35,11 @@ server_bonus: server_bonus.o libft/libft.a
 
 clean:
 	rm -f client.o server.o client_bonus.o server_bonus.o
+	rm -f libft/*.o
 
 fclean: clean
 	rm -f client server client_bonus server_bonus
+	rm -f libft/libft.a
 
 re: fclean all
 

@@ -5,11 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: brunhenr <brunhenr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/27 12:38:00 by brunhenr          #+#    #+#             */
-/*   Updated: 2024/05/28 16:35:36 by brunhenr         ###   ########.fr       */
+/*   Created: 2024/04/29 11:23:15 by brunhenr          #+#    #+#             */
+/*   Updated: 2024/06/03 20:46:05 by brunhenr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//#define _POSIX_C_SOURCE 199309L
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -18,52 +19,45 @@
 #include <sys/types.h>
 #include <errno.h>
 
-unsigned char	reverse_bits(unsigned char b)
-{
-	unsigned char	r;
-	unsigned int	byte_len;
-
-	r = 0;
-	byte_len = 8;
-	while (byte_len--)
-	{
-		r = (r << 1) | (b & 1);
-		b >>= 1;
-	}
-	return (r);
-}
-
-void	error_handler(pid_t pid, int check_kill)
+void	error_handler(pid_t pid, int check_kill, char *str)
 {
 	if (pid < 1)
 	{
 		ft_printf("error: PID out of range for this program\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
-	else if (kill(pid, 0) == -1 && (errno == ESRCH || errno == EINVAL))
+	if (kill(pid, 0) == -1)
 	{
-		ft_printf("error: this PID [%d] doesn't exist or is invalid\n", pid);
-		exit(1);
+		if (errno == ESRCH)
+			ft_printf("error: this PID [%d] doesn't exist.\n", pid);
+		else if (errno == EPERM)
+			ft_printf("error: no permissions to send signal \
+	to PID [%d].\n", pid);
+		exit(EXIT_FAILURE);
+	}
+	else if (str == NULL || str[0] == '\0')
+	{
+		ft_printf("error: message is null or empty\n");
+		exit(EXIT_FAILURE);
 	}
 	else if (check_kill == -1)
 	{
 		ft_printf("Error! Kill error using PID %d!\n", pid);
-		exit(2);
+		exit(EXIT_FAILURE);
 	}
 }
 
-void	send_message(int pid, unsigned char *str)
+void	send_message(int pid, unsigned char *str, size_t len)
 {
-	int	i;
-	int	k;
-	int	check_kill;
+	size_t	i;
+	int		k;
+	int		check_kill;
 
 	i = 0;
 	k = 0;
 	check_kill = 0;
-	while (str[i] != '\0')
+	while (i < len + 1)
 	{
-		str[i] = reverse_bits(str[i]);
 		k = 0;
 		while (k < 8)
 		{
@@ -72,45 +66,50 @@ void	send_message(int pid, unsigned char *str)
 			else
 				check_kill = kill(pid, SIGUSR1);
 			if (check_kill == -1)
-				error_handler(pid, check_kill);
+				error_handler(pid, check_kill, "a");
 			str[i] = str[i] >> 1;
-			usleep(700);
+			usleep(600);
 			k++;
 		}
 		i++;
 	}
 }
 
-void	send_end(int pid)
+void	send_len(pid_t g_server_pid, size_t len)
 {
-	int	k;
+	int	i;
+	int	check_kill;
 
-	k = 0;
-	while (k < 8)
+	i = 0;
+	check_kill = 0;
+	while (i < 64)
 	{
-		kill(pid, SIGUSR1);
+		if (len & 1)
+			check_kill = kill(g_server_pid, SIGUSR2);
+		else
+			check_kill = kill(g_server_pid, SIGUSR1);
+		if (check_kill == -1)
+			error_handler(g_server_pid, check_kill, "a");
+		len = len >> 1;
 		usleep(600);
-		k++;
+		i++;
 	}
 }
 
 int	main(int argc, char **argv)
 {
-	pid_t	pid;
+	size_t				len;
+	pid_t				pid;
 
 	if (argc != 3)
 	{
 		ft_printf("Attention! The usage is: ./client [VALID PID] [MESSAGE]\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
-	pid = ft_atoi(argv[1]);
-	error_handler(pid, 0);
-	if (argv[2] == NULL || argv[2][0] == '\0')
-	{
-		ft_printf("error: message is null or empty\n");
-		exit(1);
-	}
-	send_message (pid, (unsigned char *)argv[2]);
-	send_end (pid);
-	return (0);
+	pid = ft_atoi (argv[1]);
+	error_handler(pid, 0, argv[2]);
+	len = ft_strlen(argv[2]);
+	send_len(pid, len);
+	send_message (pid, (unsigned char *)argv[2], len);
+	return (EXIT_SUCCESS);
 }

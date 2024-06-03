@@ -6,7 +6,7 @@
 /*   By: brunhenr <brunhenr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 11:23:15 by brunhenr          #+#    #+#             */
-/*   Updated: 2024/05/29 00:49:53 by brunhenr         ###   ########.fr       */
+/*   Updated: 2024/06/03 21:00:36 by brunhenr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,13 @@ void	error_handler(pid_t pid, int check_kill, char *str)
 		ft_printf("error: PID out of range for this program\n");
 		exit(EXIT_FAILURE);
 	}
-	else if (kill(pid, 0) == -1)
+	if (kill(pid, 0) == -1)
 	{
 		if (errno == ESRCH)
 			ft_printf("error: this PID [%d] doesn't exist.\n", pid);
-		else if (errno == EINVAL)
-			ft_printf("error: this PID [%d] is invalid.\n", pid);
+		else if (errno == EPERM)
+			ft_printf("error: no permissions to send \
+			signal to PID [%d].\n", pid);
 		exit(EXIT_FAILURE);
 	}
 	else if (str == NULL || str[0] == '\0')
@@ -69,7 +70,7 @@ void	send_message(int pid, unsigned char *str, size_t len)
 			if (check_kill == -1)
 				error_handler(pid, check_kill, "a");
 			str[i] = str[i] >> 1;
-			usleep(700);
+			usleep(600);
 			k++;
 		}
 		i++;
@@ -83,7 +84,7 @@ void	handler(int signum, siginfo_t *info, void *context)
 	if ((info->si_pid == g_server_pid) && (signum == SIGUSR1))
 	{
 		ft_printf("Server (PID %d): text received!\n", info->si_pid);
-		exit(0);
+		exit(EXIT_SUCCESS);
 	}
 }
 
@@ -103,7 +104,7 @@ void	send_len(pid_t g_server_pid, size_t len)
 		if (check_kill == -1)
 			error_handler(g_server_pid, check_kill, "a");
 		len = len >> 1;
-		usleep(700);
+		usleep(600);
 		i++;
 	}
 }
@@ -122,7 +123,7 @@ int	main(int argc, char **argv)
 	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
-	{	
+	{
 		ft_printf("error : Sigaction Error");
 		exit(EXIT_FAILURE);
 	}
