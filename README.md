@@ -14,7 +14,7 @@ first run the server. It will print its PID.
 ```
 ./server
 ```
-Then, using that PID, run the client.
+Then, open a new terminal window (new process) and using that PID, run the client.
 ```
 ./client [SERVER PID] "any message"
 ```
