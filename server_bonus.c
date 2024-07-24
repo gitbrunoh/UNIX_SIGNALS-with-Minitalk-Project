@@ -6,7 +6,7 @@
 /*   By: brunhenr <brunhenr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 11:24:13 by brunhenr          #+#    #+#             */
-/*   Updated: 2024/05/28 23:59:36 by brunhenr         ###   ########.fr       */
+/*   Updated: 2024/07/24 19:33:37 by brunhenr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	len_alloc_mem(int sig, char **msg, bool *is_receiving_len, \
 		len = len | 0x8000000000000000;
 	if (*bit_count == 64)
 	{
-		printf("len: %zu\n", len);
+		//printf("len: %zu\n", len);
 		*msg = malloc(len + 1);
 		if (*msg == NULL)
 		{
@@ -54,7 +54,7 @@ void	put_byte_in_msg(char **msg, unsigned char buffer, \
 	i++;
 	if (buffer == '\0')
 	{
-		ft_printf("client: %s\n", *msg);
+		ft_printf("%s\n", *msg);
 		free(*msg);
 		*msg = NULL;
 		i = 0;
